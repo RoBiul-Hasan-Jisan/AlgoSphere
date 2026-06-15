@@ -20,7 +20,7 @@ import {
   TrendingUp,
   Award,
   Clock,
-  Briefcase,
+
   Users,
   Heart,
 } from "lucide-react";
