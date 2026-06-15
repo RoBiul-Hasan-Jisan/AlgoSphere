@@ -1,0 +1,74 @@
+import { useSyncExternalStore } from "react";
+
+/**
+ * Tiny global store for lesson completion, backed by localStorage. Using
+ * useSyncExternalStore keeps every consumer (lesson page, sidebar, library)
+ * in sync the instant a lesson is toggled — no context provider needed.
+ *
+ * A lesson is keyed by "chapterId/lessonId".
+ */
+
+const KEY = "algolume-progress";
+
+function load(): Set<string> {
+  try {
+    return new Set(JSON.parse(localStorage.getItem(KEY) ?? "[]"));
+  } catch {
+    return new Set();
+  }
+}
+
+let completed = load();
+const listeners = new Set<() => void>();
+
+function persist() {
+  try {
+    localStorage.setItem(KEY, JSON.stringify([...completed]));
+  } catch {
+    /* ignore */
+  }
+  listeners.forEach((l) => l());
+}
+
+export function lessonKey(chapterId: string, lessonId: string): string {
+  return `${chapterId}/${lessonId}`;
+}
+
+export function toggleComplete(key: string) {
+  const next = new Set(completed);
+  if (next.has(key)) next.delete(key);
+  else next.add(key);
+  completed = next; // new identity → snapshot changes
+  persist();
+}
+
+/** Wipe all lesson-completion markers (used by the reset-progress control). */
+export function clearAllProgress() {
+  if (completed.size === 0) return;
+  completed = new Set();
+  persist();
+}
+
+/** Snapshot of completed lesson keys (used by cloud sync). */
+export function getCompletedKeys(): string[] {
+  return [...completed];
+}
+
+/** Replace the completed set (used when applying a merged cloud state). */
+export function setCompletedKeys(keys: string[]) {
+  completed = new Set(keys);
+  persist();
+}
+
+function subscribe(cb: () => void): () => void {
+  listeners.add(cb);
+  return () => listeners.delete(cb);
+}
+
+/** Subscribe to completion changes (used by cloud sync). */
+export const subscribeProgress = subscribe;
+
+/** Reactive set of completed lesson keys. */
+export function useCompleted(): Set<string> {
+  return useSyncExternalStore(subscribe, () => completed);
+}

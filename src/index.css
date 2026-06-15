@@ -1,0 +1,141 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  /*
+   * Semantic colour tokens as "R G B" channels. :root is the LIGHT theme;
+   * .dark overrides with the dark theme. Accents are tuned per theme so bars
+   * and buttons stay vivid and high-contrast in both.
+   */
+  :root {
+    /* Light = "Soft Slate" — a calm, soothing scheme. Gentle blue-grey paper,
+     * softly-tinted cards, a distinct recessed code surface, soft (not harsh)
+     * borders and shadow, and slightly muted, comfortable accents. Layered and
+     * low-glare rather than bright-white or heavily darkened. */
+    --base: 215 222 232; /* gentle blue-grey paper */
+    --surface: 232 236 243; /* softly-tinted card (a calm lift, not white) */
+    --elevated: 222 228 237; /* raised controls */
+    --code: 207 215 227; /* recessed, calm code/editor surface */
+    --line: 152 165 187; /* soft slate border (visible, not harsh) */
+    --fg: 38 46 61; /* soft dark ink — comfortable, not pure black */
+    --muted: 78 88 106; /* secondary text */
+    --subtle: 116 127 147; /* tertiary text */
+    --run: 25 145 78; /* green */
+    --compare: 45 104 200; /* blue */
+    --pivot: 214 116 44; /* orange */
+    --swap: 214 84 84; /* soft red */
+    --visited: 132 78 196; /* muted purple */
+    --bar: 178 189 206; /* unsorted bar — cool grey-blue */
+    --card-shadow: 45 56 78; /* soft slate shadow */
+    --card-shadow-alpha: 0.14; /* gentle lift, not a hard brutalist slab */
+    color-scheme: light;
+  }
+
+  .dark {
+    --base: 13 14 18; /* warm-leaning near-black */
+    --surface: 23 24 30; /* card */
+    --elevated: 33 35 43; /* raised controls */
+    --code: 18 19 25; /* recessed code/editor surface */
+    --line: 52 54 64; /* border */
+    --fg: 240 239 235; /* warm off-white text */
+    --muted: 161 159 152; /* secondary text */
+    --subtle: 116 116 124; /* tertiary text */
+    --run: 52 211 120; /* green */
+    --compare: 56 189 248; /* sky-400 */
+    --pivot: 245 170 60; /* amber */
+    --swap: 248 96 88; /* coral-red */
+    --visited: 167 139 250; /* violet-400 */
+    --bar: 74 77 90; /* unsorted bar */
+    --card-shadow: 0 0 0; /* black lift */
+    --card-shadow-alpha: 0.5;
+    color-scheme: dark;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-base text-fg font-sans antialiased;
+    font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+    transition: background-color 0.2s ease, color 0.2s ease;
+  }
+
+  ::selection {
+    @apply bg-run/30 text-fg;
+  }
+
+  /* Thin custom scrollbars to match the editor aesthetic */
+  *::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+  *::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  *::-webkit-scrollbar-thumb {
+    @apply bg-line/80 rounded-full border-2 border-transparent bg-clip-padding;
+  }
+  *::-webkit-scrollbar-thumb:hover {
+    @apply bg-subtle;
+  }
+}
+
+@layer components {
+  .panel {
+    @apply rounded-2xl border border-line bg-surface shadow-sm;
+  }
+
+  /*
+   * Editorial "paper card" — a surface that floats on the page with a hard
+   * offset shadow (soft-neobrutalist). The shadow colour + opacity come from
+   * theme tokens so it reads in both light (warm grey) and dark (black lift).
+   */
+  .card {
+    @apply rounded-2xl border border-line bg-surface;
+    box-shadow: 8px 9px 0 0 rgb(var(--card-shadow) / var(--card-shadow-alpha));
+  }
+  .card-hover {
+    @apply transition-[transform,box-shadow] duration-200;
+  }
+  .card-hover:hover {
+    transform: translate(-2px, -2px);
+    box-shadow: 12px 13px 0 0 rgb(var(--card-shadow) / var(--card-shadow-alpha));
+  }
+
+  /* Small uppercase label used as section eyebrows. */
+  .eyebrow {
+    @apply text-xs font-semibold uppercase tracking-[0.18em] text-subtle;
+  }
+
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 rounded-lg px-4 py-2 text-sm font-semibold
+      transition-colors duration-200 cursor-pointer select-none
+      focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-run focus-visible:ring-offset-2
+      focus-visible:ring-offset-base disabled:cursor-not-allowed disabled:opacity-40;
+  }
+  .btn-primary {
+    @apply btn bg-run text-white hover:bg-run/90;
+  }
+  .btn-ghost {
+    @apply btn bg-elevated text-fg hover:bg-line/70 border border-line;
+  }
+  .btn-icon {
+    @apply inline-flex h-10 w-10 items-center justify-center rounded-lg border border-line
+      bg-elevated text-fg transition-colors duration-200 cursor-pointer
+      hover:bg-line/70 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-run
+      disabled:cursor-not-allowed disabled:opacity-30;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

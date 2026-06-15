@@ -1,27 +1,44 @@
-import CountBtn from "@/components/count-btn";
-import ReactSVG from "@/assets/react.svg";
-import { Badge } from "@/components/ui/badge";
+import { Route, Routes } from "react-router-dom";
+import { Navbar } from "@/components/Navbar";
+import { HomePage } from "@/pages/HomePage";
+import { LearnPage } from "@/pages/LearnPage";
+import { LessonPage } from "@/pages/LessonPage";
+import { NotesPage } from "@/pages/NotesPage";
+import { SearchPage } from "@/pages/SearchPage";
+import { PlaygroundPage } from "@/pages/PlaygroundPage";
+import { ProblemsPage } from "@/pages/ProblemsPage";
+import { ProblemPage } from "@/pages/ProblemPage";
+import { NotFoundPage } from "@/pages/NotFoundPage";
+import { IssuePage } from "@/pages/IssuePage";
+import { ScrollToTop } from "@/components/ScrollToTop";
+import { ScrollReset } from "@/components/ScrollReset";
+import { VisualizersPage } from "@/pages/visualizers/VisualizersPage";
+import { VisualizerDetailPage } from "@/pages/visualizers/VisualizerDetailPage";
+import { SortingPage } from "@/pages/SortingPage";
+import { PathfindingPage } from "@/pages/PathfindingPage";
 
-function App() {
+export default function App() {
   return (
-    <main className="flex flex-col items-center justify-center h-screen">
-      <div className="flex flex-col items-center gap-y-4">
-        <div className="inline-flex items-center gap-x-4">
-          <img src={ReactSVG} alt="React Logo" className="w-32" />
-          <span className="text-6xl">+</span>
-          <img src={"/vite.svg"} alt="Vite Logo" className="w-32" />
-        </div>
-        <a
-          href="https://ui.shadcn.com"
-          rel="noopener noreferrer nofollow"
-          target="_blank"
-        >
-          <Badge variant="outline">shadcn/ui</Badge>
-        </a>
-        <CountBtn />
-      </div>
-    </main>
+    <div className="min-h-screen bg-base">
+      <ScrollReset />
+      <Navbar />
+      <Routes>
+        <Route path="/" element={<HomePage />} />
+        <Route path="/learn" element={<LearnPage />} />
+        <Route path="/learn/:chapterId/:lessonId" element={<LessonPage />} />
+        <Route path="/search" element={<SearchPage />} />
+        <Route path="/notes" element={<NotesPage />} />
+        <Route path="/issue" element={<IssuePage />} />
+        <Route path="/playground" element={<PlaygroundPage />} />
+        <Route path="/problems" element={<ProblemsPage />} />
+        <Route path="/problems/:id" element={<ProblemPage />} />
+        <Route path="/visualizers" element={<VisualizersPage />} />
+        <Route path="/visualizers/:id" element={<VisualizerDetailPage />} />
+        <Route path="/sorting" element={<SortingPage />} />
+        <Route path="/pathfinding" element={<PathfindingPage />} />
+        <Route path="*" element={<NotFoundPage />} />
+      </Routes>
+      <ScrollToTop />
+    </div>
   );
 }
-
-export default App;
