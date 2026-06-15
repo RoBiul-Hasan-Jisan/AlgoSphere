@@ -1,12 +1,11 @@
-import { useEffect, useState, useMemo } from "react";
+import { useEffect, useState } from "react";
 import type { ReactNode } from "react";
 import { Link, useParams } from "react-router-dom";
 import {
   ArrowLeft, Play, Loader2, RotateCcw, CheckCircle2, XCircle, Lightbulb,
   Eye, BookOpen, Send, Trophy, Sparkles, Clock, Zap, BarChart3,
   Terminal, ChevronDown, ChevronUp, AlertCircle, FileCode, Brain,
-  Target, TrendingUp, Award, Flame, Star, Gauge
-} from "lucide-react";
+  Target, Award, Flame, Star} from "lucide-react";
 import { CodeEditor } from "@/components/CodeEditor";
 import { CopyButton } from "@/components/CopyButton";
 import { MarkdownLite } from "@/components/lesson/MarkdownLite";

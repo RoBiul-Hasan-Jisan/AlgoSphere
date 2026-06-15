@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import { useState, useEffect } from "react";
 import {
-  ArrowLeft, ArrowRight, BarChart3, Binary, BookOpen, CalendarRange, Check, Clock, Compass, Dices, Gauge, GitBranch,
+  ArrowRight, BarChart3, Binary, BookOpen, CalendarRange, Check, Clock, Compass, Dices, Gauge, GitBranch,
   Grid3x3, Hash, Layers, ListTree, MonitorPlay, Network, Play, Repeat, RotateCcw, Rows3,
   Search, Sigma, Spline, Terminal, Triangle, Type, LayoutList, LayoutGrid, type LucideIcon,
 } from "lucide-react";

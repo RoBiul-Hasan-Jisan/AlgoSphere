@@ -1,16 +1,16 @@
 import { useEffect, useState, useRef } from "react";
 import { 
   Play, Loader2, Terminal, Code2, RotateCcw, 
-  Sparkles, Zap, Cpu, CloudLightning, Flame,
-  Trophy, Clock, CheckCircle, XCircle, 
+  Cpu, 
+  Clock, 
   Minimize2, Maximize2, Bug, StepForward,
-  StepBack, SkipForward, Eye, ChevronRight,
-  ArrowRight, ListChecks, Variable, Braces
+  StepBack, ChevronRight,
+  ListChecks, Variable, Braces
 } from "lucide-react";
 import { CodeEditor } from "@/components/CodeEditor";
 import { usePyodide, type RunResult } from "@/lib/usePyodide";
 import { cn } from "@/lib/cn";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 
 const EXAMPLES: { name: string; code: string; difficulty: "easy" | "medium" | "hard"; time: string }[] = [
   {
@@ -107,7 +107,7 @@ interface DebugStep {
   description: string;
 }
 
-function DebugVisualizer({ steps, currentStep, onStepChange, isDebugging }: any) {
+function DebugVisualizer({ steps, currentStep, onStepChange }: any) {
   return (
     <div className="border-t border-line bg-elevated/30">
       <div className="flex items-center justify-between p-3 border-b border-line">
@@ -238,7 +238,6 @@ export function PlaygroundPage() {
     const steps: DebugStep[] = [];
     const lines = code.split('\n');
     const variables: Record<string, any> = {};
-    let currentLine = 0;
     
     // Simple parsing to track variable assignments and function calls
     for (let i = 0; i < lines.length; i++) {

@@ -1,23 +1,12 @@
 import { Link } from "react-router-dom";
-import { useState, useEffect } from "react";
 import {
-  ArrowRight, MonitorPlay, LayoutList, LayoutGrid,
+  MonitorPlay, LayoutList, 
   Grid, Search, SortAsc, GitBranch, Link2, Layers,
-  Hash, Binary, Network, Map as MapIcon, Play, RotateCcw,
-  Check, Clock, ListTree
-} from "lucide-react";
-import { motion, AnimatePresence } from "framer-motion";
+  Hash, Binary, Network, Map as MapIcon, Play, 
+  Clock} from "lucide-react";
+import { motion } from "framer-motion";
 import { VISUALIZERS } from "./registry";
-import { VizThumb } from "./VizThumb";
-import { cn } from "@/lib/cn";
 
-const TINT: Record<string, string> = {
-  "text-run": "bg-run/10",
-  "text-compare": "bg-compare/10",
-  "text-pivot": "bg-pivot/10",
-  "text-swap": "bg-swap/10",
-  "text-visited": "bg-visited/10",
-};
 
 // Map visualizer to appropriate icon
 function getVisualizerIcon(v: typeof VISUALIZERS[0], size = "h-5 w-5") {
