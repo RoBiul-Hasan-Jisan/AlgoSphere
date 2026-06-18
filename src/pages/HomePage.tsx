@@ -22,8 +22,7 @@ import {
   Clock,
   Users,
   Heart,
-  Menu,
-  X,
+ 
 } from "lucide-react";
 import { CHAPTERS, LESSON_COUNT } from "@/content";
 import { PROBLEM_COUNT } from "@/lib/problems";
