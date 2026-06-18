@@ -20,9 +20,10 @@ import {
   TrendingUp,
   Award,
   Clock,
-
   Users,
   Heart,
+  Menu,
+  X,
 } from "lucide-react";
 import { CHAPTERS, LESSON_COUNT } from "@/content";
 import { PROBLEM_COUNT } from "@/lib/problems";
@@ -194,7 +195,7 @@ const TESTIMONIALS: readonly Testimonial[] = [
 
 // ========== UI Components ==========
 const Container = ({ children, className }: { children: React.ReactNode; className?: string }) => (
-  <div className={cn("mx-auto max-w-6xl px-5 sm:px-6", className)}>
+  <div className={cn("mx-auto max-w-6xl px-4 sm:px-6 lg:px-8", className)}>
     {children}
   </div>
 );
@@ -212,15 +213,15 @@ const Section = ({ children, className, id, background = "white" }: {
   };
   
   return (
-    <section id={id} className={cn(bgStyles[background], "py-20 md:py-28", className)}>
+    <section id={id} className={cn(bgStyles[background], "py-12 sm:py-16 md:py-20 lg:py-28", className)}>
       <Container>{children}</Container>
     </section>
   );
 };
 
 const Badge = ({ children, icon: Icon }: { children: React.ReactNode; icon?: React.ElementType }) => (
-  <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-gray-200 bg-white/80 px-4 py-1.5 text-sm backdrop-blur-sm dark:border-gray-800 dark:bg-gray-950/80">
-    {Icon && <Icon className="h-3.5 w-3.5 text-gray-500" aria-hidden="true" />}
+  <div className="mb-4 sm:mb-6 inline-flex items-center gap-2 rounded-full border border-gray-200 bg-white/80 px-3 py-1 text-xs sm:text-sm backdrop-blur-sm dark:border-gray-800 dark:bg-gray-950/80">
+    {Icon && <Icon className="h-3 w-3 sm:h-3.5 sm:w-3.5 text-gray-500" aria-hidden="true" />}
     <span className="text-gray-600 dark:text-gray-400">{children}</span>
   </div>
 );
@@ -234,46 +235,46 @@ const GradientText = ({ children, className }: { children: React.ReactNode; clas
 // ========== Hero Section ==========
 const HeroSection = memo(() => (
   <section className="relative overflow-hidden">
-    {/* Animated background blobs */}
+    {/* Animated background blobs - hidden on mobile for performance */}
     <div className="absolute inset-0 -z-10">
-      <div className="absolute -left-48 -top-48 h-96 w-96 rounded-full bg-gradient-to-r from-blue-400/20 to-purple-400/20 blur-3xl" />
-      <div className="absolute -bottom-48 -right-48 h-96 w-96 rounded-full bg-gradient-to-r from-purple-400/20 to-pink-400/20 blur-3xl" />
+      <div className="absolute -left-48 -top-48 h-96 w-96 rounded-full bg-gradient-to-r from-blue-400/20 to-purple-400/20 blur-3xl hidden sm:block" />
+      <div className="absolute -bottom-48 -right-48 h-96 w-96 rounded-full bg-gradient-to-r from-purple-400/20 to-pink-400/20 blur-3xl hidden sm:block" />
     </div>
     
-    <Container className="py-20 md:py-32">
+    <Container className="py-12 sm:py-16 md:py-20 lg:py-32">
       <div className="mx-auto max-w-3xl text-center">
         <Badge icon={Sparkles}>Interactive DSA learning platform</Badge>
         
-        <h1 className="font-serif text-5xl font-bold tracking-tight text-gray-900 dark:text-white sm:text-6xl lg:text-7xl">
+        <h1 className="font-serif text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold tracking-tight text-gray-900 dark:text-white">
           Visualize every{" "}
           <GradientText>algorithm</GradientText>
         </h1>
         
-        <p className="mx-auto mt-6 max-w-2xl text-lg leading-relaxed text-gray-600 dark:text-gray-400">
+        <p className="mx-auto mt-4 sm:mt-6 max-w-2xl text-base sm:text-lg leading-relaxed text-gray-600 dark:text-gray-400 px-4">
           Don't just read about data structures and algorithms — watch them run in real-time.
           Step through executions, experiment with inputs, and truly understand how they work.
         </p>
         
-        <div className="mt-10 flex flex-wrap items-center justify-center gap-4">
+        <div className="mt-8 sm:mt-10 flex flex-col sm:flex-row flex-wrap items-center justify-center gap-3 sm:gap-4 px-4">
           <Link
             to="/learn"
-            className="group relative inline-flex items-center gap-2 overflow-hidden rounded-lg bg-gradient-to-r from-gray-900 to-gray-800 px-8 py-3.5 text-sm font-semibold text-white transition-all hover:scale-105 hover:shadow-xl dark:from-white dark:to-gray-100 dark:text-gray-900"
+            className="group relative inline-flex w-full sm:w-auto items-center justify-center gap-2 overflow-hidden rounded-lg bg-gradient-to-r from-gray-900 to-gray-800 px-6 sm:px-8 py-3.5 text-sm font-semibold text-white transition-all hover:scale-105 hover:shadow-xl dark:from-white dark:to-gray-100 dark:text-gray-900 min-h-[48px]"
           >
-            <BookOpen className="h-4 w-4" />
-            Start learning for free
-            <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+            <BookOpen className="h-4 w-4 flex-shrink-0" />
+            <span>Start learning for free</span>
+            <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1 flex-shrink-0" />
           </Link>
           
           <Link
             to="/visualizers"
-            className="inline-flex items-center gap-2 rounded-lg border-2 border-gray-300 bg-white/80 px-8 py-3.5 text-sm font-semibold text-gray-700 backdrop-blur-sm transition-all hover:scale-105 hover:bg-white dark:border-gray-700 dark:bg-gray-900/80 dark:text-gray-300 dark:hover:bg-gray-900"
+            className="inline-flex w-full sm:w-auto items-center justify-center gap-2 rounded-lg border-2 border-gray-300 bg-white/80 px-6 sm:px-8 py-3.5 text-sm font-semibold text-gray-700 backdrop-blur-sm transition-all hover:scale-105 hover:bg-white dark:border-gray-700 dark:bg-gray-900/80 dark:text-gray-300 dark:hover:bg-gray-900 min-h-[48px]"
           >
-            <Play className="h-4 w-4" />
-            Try a visualizer
+            <Play className="h-4 w-4 flex-shrink-0" />
+            <span>Try a visualizer</span>
           </Link>
         </div>
         
-        <div className="mt-12 flex flex-wrap items-center justify-center gap-8 text-sm text-gray-500">
+        <div className="mt-8 sm:mt-12 grid grid-cols-2 sm:flex flex-wrap items-center justify-center gap-4 sm:gap-8 text-xs sm:text-sm text-gray-500 px-4">
           {[
             { icon: Zap, text: "Free forever" },
             { icon: Shield, text: "No signup required" },
@@ -281,8 +282,8 @@ const HeroSection = memo(() => (
             { icon: Heart, text: "Open source" }
           ].map(({ icon: Icon, text }) => (
             <div key={text} className="flex items-center gap-2">
-              <Icon className="h-4 w-4" aria-hidden="true" />
-              <span>{text}</span>
+              <Icon className="h-3.5 w-3.5 sm:h-4 sm:w-4 flex-shrink-0" aria-hidden="true" />
+              <span className="whitespace-nowrap">{text}</span>
             </div>
           ))}
         </div>
@@ -295,17 +296,17 @@ HeroSection.displayName = "HeroSection";
 
 // ========== Stats Section ==========
 const StatsSection = memo(() => (
-  <Section background="gray" className="py-12">
-    <div className="grid grid-cols-2 gap-8 text-center sm:grid-cols-4">
+  <Section background="gray" className="py-8 sm:py-12">
+    <div className="grid grid-cols-2 sm:grid-cols-4 gap-6 sm:gap-8 text-center">
       {STATS_ITEMS.map(({ value, label, icon: Icon }) => (
         <div key={label} className="group">
-          <div className="mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-gradient-to-br from-blue-100 to-purple-100 dark:from-blue-950/50 dark:to-purple-950/50">
-            <Icon className="h-5 w-5 text-gray-700 dark:text-gray-300" />
+          <div className="mx-auto mb-2 sm:mb-3 flex h-10 w-10 sm:h-12 sm:w-12 items-center justify-center rounded-full bg-gradient-to-br from-blue-100 to-purple-100 dark:from-blue-950/50 dark:to-purple-950/50">
+            <Icon className="h-4 w-4 sm:h-5 sm:w-5 text-gray-700 dark:text-gray-300" />
           </div>
-          <div className="text-4xl font-bold text-gray-900 transition-all group-hover:scale-105 dark:text-white">
+          <div className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 transition-all group-hover:scale-105 dark:text-white">
             {value}
           </div>
-          <div className="mt-1 text-sm font-medium uppercase tracking-wider text-gray-500">
+          <div className="mt-1 text-xs sm:text-sm font-medium uppercase tracking-wider text-gray-500">
             {label}
           </div>
         </div>
@@ -319,32 +320,32 @@ StatsSection.displayName = "StatsSection";
 // ========== Pillars Section ==========
 const PillarsSection = memo(() => (
   <Section>
-    <div className="mb-16 text-center">
+    <div className="mb-10 sm:mb-12 md:mb-16 text-center px-4">
       <Badge>A comprehensive approach</Badge>
-      <h2 className="font-serif text-4xl font-bold tracking-tight text-gray-900 dark:text-white sm:text-5xl">
+      <h2 className="font-serif text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight text-gray-900 dark:text-white">
         Five ways to <GradientText>master</GradientText> DSA
       </h2>
-      <p className="mx-auto mt-4 max-w-2xl text-lg text-gray-600 dark:text-gray-400">
+      <p className="mx-auto mt-3 sm:mt-4 max-w-2xl text-base sm:text-lg text-gray-600 dark:text-gray-400">
         Everything you need, designed to work together seamlessly
       </p>
     </div>
     
-    <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-5">
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 sm:gap-6 px-4">
       {PILLARS.map((pillar) => (
         <div
           key={pillar.title}
-          className="group relative overflow-hidden rounded-2xl border border-gray-100 bg-white/50 p-6 transition-all hover:border-gray-200 hover:shadow-xl dark:border-gray-800 dark:bg-gray-900/30"
+          className="group relative overflow-hidden rounded-2xl border border-gray-100 bg-white/50 p-4 sm:p-6 transition-all hover:border-gray-200 hover:shadow-xl dark:border-gray-800 dark:bg-gray-900/30"
         >
-          <div className={cn("mb-4 inline-flex rounded-xl bg-gradient-to-br p-3", pillar.gradient, "bg-opacity-10")}>
-            <pillar.icon className={cn("h-5 w-5 transition-transform group-hover:scale-110", pillar.color)} />
+          <div className={cn("mb-3 sm:mb-4 inline-flex rounded-xl bg-gradient-to-br p-2.5 sm:p-3", pillar.gradient, "bg-opacity-10")}>
+            <pillar.icon className={cn("h-4 w-4 sm:h-5 sm:w-5 transition-transform group-hover:scale-110", pillar.color)} />
           </div>
-          <h3 className="mb-2 text-lg font-semibold text-gray-900 dark:text-white">
+          <h3 className="mb-1.5 sm:mb-2 text-base sm:text-lg font-semibold text-gray-900 dark:text-white">
             {pillar.title}
           </h3>
-          <p className="text-sm text-gray-500 leading-relaxed">
+          <p className="text-xs sm:text-sm text-gray-500 leading-relaxed">
             {pillar.description}
           </p>
-          <div className="mt-3 text-xs font-semibold text-gray-400">
+          <div className="mt-2 sm:mt-3 text-xs font-semibold text-gray-400">
             {pillar.stat}
           </div>
         </div>
@@ -364,47 +365,47 @@ const FeatureCard = memo(({ feature, isReversed = false }: { feature: Feature; i
   }[feature.title];
 
   return (
-    <div className="grid grid-cols-1 gap-12 lg:grid-cols-2 lg:gap-16">
-      <div className={cn("space-y-6", isReversed && "lg:order-2")}>
-        <div className="inline-flex rounded-2xl bg-gradient-to-br from-blue-50 to-purple-50 p-3 dark:from-blue-950/30 dark:to-purple-950/30">
-          <feature.icon className="h-6 w-6 text-gray-700 dark:text-gray-300" />
+    <div className="grid grid-cols-1 gap-8 sm:gap-10 lg:gap-12 xl:gap-16 px-4">
+      <div className={cn("space-y-4 sm:space-y-6", isReversed && "lg:order-2")}>
+        <div className="inline-flex rounded-2xl bg-gradient-to-br from-blue-50 to-purple-50 p-2.5 sm:p-3 dark:from-blue-950/30 dark:to-purple-950/30">
+          <feature.icon className="h-5 w-5 sm:h-6 sm:w-6 text-gray-700 dark:text-gray-300" />
         </div>
         
-        <h2 className="font-serif text-3xl font-bold tracking-tight text-gray-900 dark:text-white sm:text-4xl">
+        <h2 className="font-serif text-2xl sm:text-3xl md:text-4xl font-bold tracking-tight text-gray-900 dark:text-white">
           {feature.title}
         </h2>
         
-        <p className="text-lg leading-relaxed text-gray-600 dark:text-gray-400">
+        <p className="text-base sm:text-lg leading-relaxed text-gray-600 dark:text-gray-400">
           {feature.description}
         </p>
         
         {feature.stats && (
-          <div className="flex gap-6 border-t border-gray-100 pt-6 dark:border-gray-800">
+          <div className="flex gap-4 sm:gap-6 border-t border-gray-100 pt-4 sm:pt-6 dark:border-gray-800">
             {feature.stats.map((stat) => (
               <div key={stat.label}>
-                <div className="text-2xl font-bold text-gray-900 dark:text-white">{stat.value}</div>
+                <div className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-white">{stat.value}</div>
                 <div className="text-xs text-gray-500">{stat.label}</div>
               </div>
             ))}
           </div>
         )}
         
-        <ul className="space-y-3">
+        <ul className="space-y-2.5 sm:space-y-3">
           {feature.benefits.map((benefit) => (
             <li key={benefit} className="flex items-start gap-3">
-              <CheckCircle2 className="mt-0.5 h-5 w-5 flex-shrink-0 text-green-500" />
-              <span className="text-gray-600 dark:text-gray-400">{benefit}</span>
+              <CheckCircle2 className="mt-0.5 h-4 w-4 sm:h-5 sm:w-5 flex-shrink-0 text-green-500" />
+              <span className="text-sm sm:text-base text-gray-600 dark:text-gray-400">{benefit}</span>
             </li>
           ))}
         </ul>
       </div>
       
       <div className={cn(
-        "overflow-hidden rounded-2xl border border-gray-100 bg-gradient-to-br from-gray-50 to-white shadow-lg transition-all hover:shadow-xl dark:border-gray-800 dark:from-gray-900/30 dark:to-gray-950",
+        "overflow-hidden rounded-2xl border border-gray-100 bg-gradient-to-br from-gray-50 to-white shadow-lg transition-all hover:shadow-xl dark:border-gray-800 dark:from-gray-900/30 dark:to-gray-950 min-h-[200px] sm:min-h-[250px] lg:min-h-[300px]",
         isReversed && "lg:order-1"
       )}>
         <Suspense fallback={
-          <div className="flex h-80 items-center justify-center">
+          <div className="flex h-48 sm:h-64 lg:h-80 items-center justify-center">
             <div className="h-8 w-8 animate-spin rounded-full border-2 border-gray-300 border-t-gray-600" />
           </div>
         }>
@@ -420,32 +421,32 @@ FeatureCard.displayName = "FeatureCard";
 // ========== Testimonials Section ==========
 const TestimonialsSection = memo(() => (
   <Section background="gray">
-    <div className="mb-12 text-center">
+    <div className="mb-8 sm:mb-10 md:mb-12 text-center px-4">
       <Badge icon={Users}>Loved by learners worldwide</Badge>
-      <h2 className="font-serif text-4xl font-bold tracking-tight text-gray-900 dark:text-white">
+      <h2 className="font-serif text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight text-gray-900 dark:text-white">
         Trusted by <GradientText>thousands</GradientText>
       </h2>
     </div>
     
-    <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
+    <div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6 px-4">
       {TESTIMONIALS.map((testimonial) => (
         <div
           key={testimonial.name}
-          className="rounded-2xl bg-white p-6 shadow-lg dark:bg-gray-900/50"
+          className="rounded-2xl bg-white p-5 sm:p-6 shadow-lg dark:bg-gray-900/50"
         >
-          <div className="mb-4 flex gap-1">
+          <div className="mb-3 sm:mb-4 flex gap-1">
             {[...Array(testimonial.rating)].map((_, i) => (
-              <Star key={i} className="h-4 w-4 fill-yellow-400 text-yellow-400" />
+              <Star key={i} className="h-3.5 w-3.5 sm:h-4 sm:w-4 fill-yellow-400 text-yellow-400" />
             ))}
           </div>
-          <p className="mb-6 text-gray-600 dark:text-gray-400">"{testimonial.content}"</p>
+          <p className="mb-4 sm:mb-6 text-sm sm:text-base text-gray-600 dark:text-gray-400">"{testimonial.content}"</p>
           <div className="flex items-center gap-3">
-            <div className="flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-br from-blue-500 to-purple-500 text-sm font-semibold text-white">
+            <div className="flex h-8 w-8 sm:h-10 sm:w-10 items-center justify-center rounded-full bg-gradient-to-br from-blue-500 to-purple-500 text-xs sm:text-sm font-semibold text-white flex-shrink-0">
               {testimonial.avatar}
             </div>
-            <div>
-              <div className="font-semibold text-gray-900 dark:text-white">{testimonial.name}</div>
-              <div className="text-sm text-gray-500">{testimonial.role}</div>
+            <div className="min-w-0">
+              <div className="text-sm sm:text-base font-semibold text-gray-900 dark:text-white truncate">{testimonial.name}</div>
+              <div className="text-xs sm:text-sm text-gray-500 truncate">{testimonial.role}</div>
             </div>
           </div>
         </div>
@@ -462,24 +463,25 @@ const VisualizerGrid = memo(() => {
   const featured = useMemo(() => FEATURED_IDS.map((id) => vizById[id]).filter(Boolean), [vizById]);
 
   return (
-    <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 px-4">
       {featured.map((visualizer) => (
         <Link
           key={visualizer.id}
           to={visualizer.to ?? `/visualizers/${visualizer.id}`}
-          className="group relative overflow-hidden rounded-2xl border border-gray-100 bg-white p-5 transition-all hover:border-gray-200 hover:shadow-xl dark:border-gray-800 dark:bg-gray-900/50 dark:hover:border-gray-700"
+          className="group relative overflow-hidden rounded-2xl border border-gray-100 bg-white p-4 sm:p-5 transition-all hover:border-gray-200 hover:shadow-xl dark:border-gray-800 dark:bg-gray-900/50 dark:hover:border-gray-700"
         >
-          <div className="mb-4 flex h-32 items-center justify-center rounded-xl bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800">
+          <div className="mb-3 sm:mb-4 flex h-24 sm:h-28 md:h-32 items-center justify-center rounded-xl bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800">
             <VizThumb id={visualizer.id} />
           </div>
-          <h3 className="mb-2 text-lg font-semibold text-gray-900 dark:text-white">
+          <h3 className="mb-1.5 sm:mb-2 text-base sm:text-lg font-semibold text-gray-900 dark:text-white line-clamp-1">
             {visualizer.title}
           </h3>
-          <p className="text-sm text-gray-500 line-clamp-2">
+          <p className="text-xs sm:text-sm text-gray-500 line-clamp-2">
             {visualizer.blurb}
           </p>
-          <div className="mt-4 flex items-center text-sm font-medium text-blue-600 transition-all group-hover:gap-1 dark:text-blue-400">
-            Explore <ChevronRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+          <div className="mt-3 sm:mt-4 flex items-center text-sm font-medium text-blue-600 transition-all group-hover:gap-1 dark:text-blue-400">
+            <span>Explore</span>
+            <ChevronRight className="h-4 w-4 transition-transform group-hover:translate-x-1 flex-shrink-0" />
           </div>
         </Link>
       ))}
@@ -492,28 +494,28 @@ VisualizerGrid.displayName = "VisualizerGrid";
 // ========== CTA Section ==========
 const CTASection = memo(() => (
   <Section background="gradient" className="border-b">
-    <div className="rounded-3xl bg-gradient-to-br from-gray-900 to-gray-800 px-8 py-16 text-center shadow-2xl dark:from-gray-950 dark:to-gray-900 sm:px-16">
+    <div className="rounded-3xl bg-gradient-to-br from-gray-900 to-gray-800 px-6 sm:px-8 md:px-12 lg:px-16 py-12 sm:py-14 md:py-16 text-center shadow-2xl dark:from-gray-950 dark:to-gray-900 mx-4">
       <Badge icon={Award}>Start your journey today</Badge>
-      <h2 className="font-serif text-4xl font-bold tracking-tight text-white sm:text-5xl">
+      <h2 className="font-serif text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight text-white">
         Ready to <GradientText>visualize</GradientText> your learning?
       </h2>
-      <p className="mx-auto mt-4 max-w-md text-gray-300">
+      <p className="mx-auto mt-3 sm:mt-4 max-w-md text-sm sm:text-base text-gray-300">
         Join thousands of developers mastering algorithms the visual way
       </p>
-      <div className="mt-10 flex flex-wrap items-center justify-center gap-4">
+      <div className="mt-8 sm:mt-10 flex flex-col sm:flex-row flex-wrap items-center justify-center gap-3 sm:gap-4">
         <Link
           to="/learn"
-          className="inline-flex items-center gap-2 rounded-lg bg-white px-8 py-3.5 text-sm font-semibold text-gray-900 transition-all hover:scale-105 hover:shadow-xl"
+          className="inline-flex w-full sm:w-auto items-center justify-center gap-2 rounded-lg bg-white px-6 sm:px-8 py-3.5 text-sm font-semibold text-gray-900 transition-all hover:scale-105 hover:shadow-xl min-h-[48px]"
         >
-          <BookOpen className="h-4 w-4" />
-          Get started for free
+          <BookOpen className="h-4 w-4 flex-shrink-0" />
+          <span>Get started for free</span>
         </Link>
         <Link
           to="/problems"
-          className="inline-flex items-center gap-2 rounded-lg border-2 border-gray-600 bg-transparent px-8 py-3.5 text-sm font-semibold text-white transition-all hover:scale-105 hover:bg-white/10"
+          className="inline-flex w-full sm:w-auto items-center justify-center gap-2 rounded-lg border-2 border-gray-600 bg-transparent px-6 sm:px-8 py-3.5 text-sm font-semibold text-white transition-all hover:scale-105 hover:bg-white/10 min-h-[48px]"
         >
-          <FlaskConical className="h-4 w-4" />
-          Try a challenge
+          <FlaskConical className="h-4 w-4 flex-shrink-0" />
+          <span>Try a challenge</span>
         </Link>
       </div>
     </div>
@@ -524,16 +526,16 @@ CTASection.displayName = "CTASection";
 
 // ========== Footer ==========
 const Footer = memo(() => (
-  <footer className="border-t border-gray-100 bg-white py-12 dark:border-gray-800 dark:bg-gray-950">
+  <footer className="border-t border-gray-100 bg-white py-8 sm:py-10 md:py-12 dark:border-gray-800 dark:bg-gray-950">
     <Container>
-      <div className="text-center">
-        <p className="text-2xl font-bold text-gray-900 dark:text-white">
+      <div className="text-center px-4">
+        <p className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-white">
           Algo<span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text font-light text-transparent">Sphere</span>
         </p>
-        <p className="mt-2 text-gray-500">
+        <p className="mt-1.5 sm:mt-2 text-xs sm:text-sm text-gray-500">
           The interactive way to learn algorithms
         </p>
-        <div className="mt-8 flex flex-wrap items-center justify-center gap-x-8 gap-y-3 text-sm text-gray-500">
+        <div className="mt-6 sm:mt-8 flex flex-wrap items-center justify-center gap-4 sm:gap-x-8 sm:gap-y-3 text-xs sm:text-sm text-gray-500">
           {["Learn", "Visualizers", "Playground", "Problems", "Notes", "Feedback"].map((item) => (
             <Link
               key={item}
@@ -544,7 +546,7 @@ const Footer = memo(() => (
             </Link>
           ))}
         </div>
-        <div className="mt-8 pt-8 border-t border-gray-100 dark:border-gray-800">
+        <div className="mt-6 sm:mt-8 pt-6 sm:pt-8 border-t border-gray-100 dark:border-gray-800">
           <p className="text-xs text-gray-400">
             © {new Date().getFullYear()} AlgoSphere. Made with ❤️ for developers worldwide.
           </p>
@@ -559,36 +561,36 @@ Footer.displayName = "Footer";
 // ========== Main Component ==========
 export function HomePage() {
   return (
-    <div className="min-h-screen bg-white dark:bg-gray-950">
+    <div className="min-h-screen bg-white dark:bg-gray-950 overflow-x-hidden">
       <HeroSection />
       <StatsSection />
       <PillarsSection />
       
       {FEATURES.map((feature, index) => (
-        <Section key={feature.title}>
+        <Section key={feature.title} className="py-12 sm:py-16 md:py-20 lg:py-28">
           <FeatureCard feature={feature} isReversed={index === 1} />
         </Section>
       ))}
       
       <TestimonialsSection />
       
-      <Section>
-        <div className="mb-10 flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-end">
+      <Section className="py-12 sm:py-16 md:py-20 lg:py-28">
+        <div className="mb-8 sm:mb-10 flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-end px-4">
           <div>
             <Badge>Start exploring right away</Badge>
-            <h2 className="font-serif text-4xl font-bold tracking-tight text-gray-900 dark:text-white">
+            <h2 className="font-serif text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight text-gray-900 dark:text-white">
               Featured <GradientText>visualizers</GradientText>
             </h2>
-            <p className="mt-2 text-gray-600 dark:text-gray-400">
+            <p className="mt-1.5 sm:mt-2 text-sm sm:text-base text-gray-600 dark:text-gray-400">
               No setup required — just click and learn
             </p>
           </div>
           <Link
             to="/visualizers"
-            className="inline-flex items-center gap-2 rounded-lg px-5 py-2.5 text-sm font-medium text-gray-600 transition-all hover:bg-gray-100 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-white"
+            className="inline-flex items-center gap-2 rounded-lg px-4 sm:px-5 py-2 sm:py-2.5 text-sm font-medium text-gray-600 transition-all hover:bg-gray-100 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-white whitespace-nowrap"
           >
-            View all visualizers
-            <ChevronRight className="h-4 w-4" />
+            <span>View all visualizers</span>
+            <ChevronRight className="h-4 w-4 flex-shrink-0" />
           </Link>
         </div>
         <VisualizerGrid />
