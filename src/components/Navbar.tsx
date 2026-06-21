@@ -1,16 +1,14 @@
 import { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { Search, Menu, X, MessageSquarePlus, Sparkles, Compass, Code2, Brain, NotebookPen } from "lucide-react";
+import { Menu, X, Sparkles, Compass, Code2, Brain, NotebookPen } from "lucide-react";
 import { cn } from "@/lib/cn";
 import { Logo } from "./Logo";
 import { ThemeToggle } from "./ThemeToggle";
-import { CommandPalette } from "./CommandPalette";
-import { ShortcutsHelp } from "./ShortcutsHelp";
 import { AccountMenu, SyncStatusLine } from "./AccountMenu";
 import { initAuth, useAuth, signInWithGoogle } from "@/lib/auth";
 import { isSupabaseConfigured } from "@/lib/supabase";
 
-const NAV = [
+const NAV_ITEMS = [
   { to: "/learn", label: "Learn", icon: Brain },
   { to: "/visualizers", label: "Visualizers", icon: Compass },
   { to: "/playground", label: "Playground", icon: Code2 },
@@ -18,241 +16,161 @@ const NAV = [
   { to: "/notes", label: "Notes", icon: NotebookPen },
 ];
 
-export function Navbar() {
-  const { pathname } = useLocation();
-  const [paletteOpen, setPaletteOpen] = useState(false);
-  const [mobileOpen, setMobileOpen] = useState(false);
-  const [helpOpen, setHelpOpen] = useState(false);
+// --- Custom Hooks ---
+
+function useScroll(threshold = 10) {
   const [scrolled, setScrolled] = useState(false);
-  const [activeIndicator, setActiveIndicator] = useState({ left: 0, width: 0 });
-  const { user } = useAuth();
-
   useEffect(() => {
-    initAuth();
-  }, []);
-
-  // Global shortcuts
-  useEffect(() => {
-    const onKey = (e: KeyboardEvent) => {
-      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "k") {
-        e.preventDefault();
-        setPaletteOpen((v) => !v);
-        return;
-      }
-      const el = e.target as HTMLElement | null;
-      const typing = el && (el.tagName === "INPUT" || el.tagName === "TEXTAREA" || el.isContentEditable);
-      if (e.key === "?" && !typing && !e.metaKey && !e.ctrlKey) {
-        e.preventDefault();
-        setHelpOpen((v) => !v);
-      }
-    };
-    window.addEventListener("keydown", onKey);
-    return () => window.removeEventListener("keydown", onKey);
-  }, []);
-
-  useEffect(() => {
-    setMobileOpen(false);
-    // Update active indicator position when pathname changes
-    updateActiveIndicator();
-  }, [pathname]);
-
-  useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 4);
-    onScroll();
+    const onScroll = () => setScrolled(window.scrollY > threshold);
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
-  }, []);
+  }, [threshold]);
+  return scrolled;
+}
 
-  useEffect(() => {
-    updateActiveIndicator();
-    window.addEventListener("resize", updateActiveIndicator);
-    return () => window.removeEventListener("resize", updateActiveIndicator);
-  }, []);
+// --- Main Component ---
 
-  const updateActiveIndicator = () => {
-    const activeLink = document.querySelector(`[data-nav-active="true"]`);
-    if (activeLink) {
-      const rect = activeLink.getBoundingClientRect();
-      const container = document.querySelector('[data-nav-container]');
-      if (container) {
-        const containerRect = container.getBoundingClientRect();
-        setActiveIndicator({
-          left: rect.left - containerRect.left,
-          width: rect.width,
-        });
-      }
-    }
-  };
+export function Navbar() {
+  const { pathname } = useLocation();
+  const [mobileOpen, setMobileOpen] = useState(false);
+  const scrolled = useScroll();
+
+  useEffect(() => { initAuth(); }, []);
+  useEffect(() => { setMobileOpen(false); }, [pathname]);
 
   return (
     <>
       <header
         className={cn(
-          "fixed top-4 left-1/2 z-50 w-[calc(100%-2rem)] max-w-7xl -translate-x-1/2 transition-all duration-300",
-          scrolled ? "top-2" : "top-4"
+          "fixed inset-x-0 top-0 z-50 transition-all duration-300",
+          scrolled ? "py-2" : "py-4"
         )}
       >
-        <div
-          className={cn(
-            "relative rounded-2xl border backdrop-blur-xl transition-all duration-300",
-            scrolled 
-              ? "border-white/20 bg-black/70 shadow-2xl dark:bg-white/10" 
-              : "border-white/10 bg-black/50 dark:bg-white/5",
-            "hover:border-white/30 hover:shadow-xl"
-          )}
-        >
-          <div className="flex h-14 items-center justify-between px-4 sm:px-6">
-            {/* Logo */}
-            <Link 
-              to="/" 
-              className="group relative flex items-center gap-2.5"
-            >
-              <div className="absolute inset-0 rounded-full bg-gradient-to-r from-purple-500 to-pink-500 opacity-0 blur-xl transition-opacity group-hover:opacity-20" />
-              <Logo className="relative h-7 w-7 transition-transform duration-200 group-hover:scale-105" />
-              <span className="relative font-display text-lg font-semibold tracking-tight bg-gradient-to-r from-white to-white/70 bg-clip-text text-transparent">
-                Algo<span className="bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">Sphere</span>
-              </span>
-            </Link>
-
-            {/* Desktop Navigation - Modern pill design */}
-            <div 
-              data-nav-container
-              className="relative hidden items-center gap-1 rounded-full bg-white/5 px-2 py-1 backdrop-blur-sm md:flex"
-            >
-              {/* Active indicator */}
-              {activeIndicator.width > 0 && (
-                <div
-                  className="absolute top-1 bottom-1 rounded-full bg-gradient-to-r from-purple-500/20 to-pink-500/20 transition-all duration-300"
-                  style={{
-                    left: activeIndicator.left,
-                    width: activeIndicator.width,
-                  }}
-                />
-              )}
-              
-              {NAV.map((item) => {
-                const active = pathname.startsWith(item.to);
-                const Icon = item.icon;
-                return (
-                  <Link
-                    key={item.to}
-                    to={item.to}
-                    data-nav-active={active}
-                    className={cn(
-                      "relative z-10 flex items-center gap-2 rounded-full px-4 py-1.5 text-sm font-medium transition-all duration-200",
-                      active 
-                        ? "text-white" 
-                        : "text-white/60 hover:text-white hover:bg-white/10",
-                    )}
-                  >
-                    <Icon className="h-3.5 w-3.5" />
-                    {item.label}
-                  </Link>
-                );
-              })}
-            </div>
-
-            {/* Right side actions */}
-            <div className="flex items-center gap-2">
-              {/* Quick switcher button */}
-              <button
-                onClick={() => setPaletteOpen(true)}
-                className="hidden items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1.5 text-sm text-white/60 transition-all hover:bg-white/10 hover:text-white sm:flex"
-                aria-label="Open quick switcher"
-              >
-                <Search className="h-3.5 w-3.5" />
-                <span className="text-xs">Search...</span>
-                <kbd className="ml-1 rounded bg-white/10 px-1.5 py-0.5 font-mono text-[10px] text-white/40">⌘K</kbd>
-              </button>
-              
-              <button
-                onClick={() => setPaletteOpen(true)}
-                className="btn-icon rounded-full sm:hidden"
-                aria-label="Open quick switcher"
-              >
-                <Search className="h-4 w-4" />
-              </button>
-
-              <Link
-                to="/issue"
-                className={cn(
-                  "rounded-full p-2 transition-all",
-                  pathname.startsWith("/issue") 
-                    ? "bg-gradient-to-r from-purple-500/20 to-pink-500/20 text-white" 
-                    : "text-white/60 hover:bg-white/10 hover:text-white"
-                )}
-                aria-label="Submit feedback"
-              >
-                <MessageSquarePlus className="h-4 w-4" />
-              </Link>
-              
-              <ThemeToggle />
-              <AccountMenu />
-
-              {/* Mobile menu toggle */}
-              <button
-                onClick={() => setMobileOpen((v) => !v)}
-                className="rounded-full p-2 text-white/60 transition-all hover:bg-white/10 hover:text-white md:hidden"
-                aria-label="Toggle menu"
-              >
-                {mobileOpen ? <X className="h-4 w-4" /> : <Menu className="h-4 w-4" />}
-              </button>
-            </div>
+        <div className="mx-auto max-w-7xl px-4 sm:px-6">
+          <div
+            className={cn(
+              "relative flex h-14 items-center justify-between rounded-2xl border px-4 transition-all duration-300",
+              scrolled 
+                ? "border-white/10 bg-black/60 shadow-2xl backdrop-blur-xl dark:bg-[#0a0a0a]/80" 
+                : "border-transparent bg-transparent"
+            )}
+          >
+            <BrandLogo />
+            <DesktopNav currentPath={pathname} />
+            <NavActions 
+              mobileOpen={mobileOpen}
+              onToggleMobile={() => setMobileOpen(!mobileOpen)}
+            />
           </div>
 
-          {/* Mobile dropdown */}
-          {mobileOpen && (
-            <div className="border-t border-white/10 bg-black/90 backdrop-blur-xl md:hidden rounded-b-2xl">
-              <nav className="flex flex-col gap-2 p-4">
-                {NAV.map((item) => {
-                  const active = pathname.startsWith(item.to);
-                  const Icon = item.icon;
-                  return (
-                    <Link
-                      key={item.to}
-                      to={item.to}
-                      className={cn(
-                        "flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-medium transition-all",
-                        active 
-                          ? "bg-gradient-to-r from-purple-500/20 to-pink-500/20 text-white" 
-                          : "text-white/60 hover:bg-white/10 hover:text-white"
-                      )}
-                    >
-                      <Icon className="h-4 w-4" />
-                      {item.label}
-                    </Link>
-                  );
-                })}
-                
-                <Link 
-                  to="/issue" 
-                  className="flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-medium text-white/60 transition-all hover:bg-white/10 hover:text-white"
-                >
-                  <MessageSquarePlus className="h-4 w-4" />
-                  Submit feedback
-                </Link>
-                
-                {isSupabaseConfigured && !user && (
-                  <button
-                    onClick={() => signInWithGoogle()}
-                    className="mt-2 flex items-center justify-center gap-2 rounded-xl border border-white/20 bg-gradient-to-r from-purple-500/20 to-pink-500/20 px-4 py-3 text-sm font-medium text-white transition-all hover:from-purple-500/30 hover:to-pink-500/30"
-                  >
-                    Sign in with Google
-                  </button>
-                )}
-                
-                <SyncStatusLine />
-              </nav>
-            </div>
-          )}
+          {/* Premium Floating Mobile Menu */}
+          {mobileOpen && <MobileMenu currentPath={pathname} />}
         </div>
       </header>
 
-      {/* Spacer to prevent content from going under fixed header */}
-      <div className="h-20" />
-
-      <CommandPalette open={paletteOpen} onClose={() => setPaletteOpen(false)} />
-      <ShortcutsHelp open={helpOpen} onClose={() => setHelpOpen(false)} />
+      {/* Spacer */}
+      <div className="h-24" aria-hidden="true" />
     </>
+  );
+}
+
+// --- Sub-components ---
+
+function BrandLogo() {
+  return (
+    <Link to="/" className="group flex items-center gap-3 outline-none focus-visible:ring-2 focus-visible:ring-purple-500 rounded-lg">
+      <div className="relative flex h-8 w-8 items-center justify-center rounded-xl bg-gradient-to-br from-purple-500/20 to-pink-500/20 border border-white/10 transition-transform group-hover:scale-105">
+        <Logo className="h-5 w-5 text-white" />
+      </div>
+      <span className="font-display text-lg font-bold tracking-tight text-white">
+        Algo<span className="text-purple-400">Sphere</span>
+      </span>
+    </Link>
+  );
+}
+
+function DesktopNav({ currentPath }: { currentPath: string }) {
+  return (
+    <nav className="hidden md:absolute md:left-1/2 md:top-1/2 md:flex md:-translate-x-1/2 md:-translate-y-1/2 items-center gap-1 rounded-full bg-white/5 p-1 border border-white/5 backdrop-blur-md">
+      {NAV_ITEMS.map(({ to, label, icon: Icon }) => {
+        const isActive = currentPath.startsWith(to);
+        return (
+          <Link
+            key={to}
+            to={to}
+            className={cn(
+              "relative flex items-center gap-2 rounded-full px-4 py-1.5 text-sm font-medium transition-all duration-200 outline-none focus-visible:ring-2 focus-visible:ring-purple-500",
+              isActive 
+                ? "bg-white/10 text-white shadow-sm" 
+                : "text-neutral-400 hover:bg-white/5 hover:text-white"
+            )}
+          >
+            <Icon className="h-4 w-4" />
+            {label}
+          </Link>
+        );
+      })}
+    </nav>
+  );
+}
+
+function NavActions({ mobileOpen, onToggleMobile }: { mobileOpen: boolean, onToggleMobile: () => void }) {
+  return (
+    <div className="flex items-center gap-3">
+      <ThemeToggle />
+      <AccountMenu />
+
+      <button
+        onClick={onToggleMobile}
+        className="md:hidden p-2 text-neutral-400 hover:text-white outline-none focus-visible:ring-2 focus-visible:ring-purple-500 rounded-full"
+      >
+        {mobileOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+      </button>
+    </div>
+  );
+}
+
+function MobileMenu({ currentPath }: { currentPath: string }) {
+  const { user } = useAuth();
+
+  return (
+    <div className="absolute left-4 right-4 top-20 rounded-2xl border border-white/10 bg-[#0a0a0a]/95 p-4 shadow-2xl backdrop-blur-xl md:hidden animate-in slide-in-from-top-4 fade-in-20">
+      <nav className="flex flex-col gap-1">
+        {NAV_ITEMS.map(({ to, label, icon: Icon }) => {
+          const isActive = currentPath.startsWith(to);
+          return (
+            <Link
+              key={to}
+              to={to}
+              className={cn(
+                "flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-medium transition-all",
+                isActive 
+                  ? "bg-purple-500/10 text-purple-400" 
+                  : "text-neutral-400 hover:bg-white/5 hover:text-white"
+              )}
+            >
+              <Icon className="h-5 w-5" />
+              {label}
+            </Link>
+          );
+        })}
+        
+        {isSupabaseConfigured && !user && (
+          <>
+            <div className="my-2 h-px w-full bg-white/10" />
+            <button
+              onClick={() => signInWithGoogle()}
+              className="mt-2 flex w-full items-center justify-center rounded-xl bg-white text-black px-4 py-3 text-sm font-semibold transition-transform hover:scale-[0.98]"
+            >
+              Sign in with Google
+            </button>
+          </>
+        )}
+        
+        <div className="mt-4 px-2">
+          <SyncStatusLine />
+        </div>
+      </nav>
+    </div>
   );
 }

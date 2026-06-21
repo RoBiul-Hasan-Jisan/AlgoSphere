@@ -1,5 +1,6 @@
 import { Route, Routes } from "react-router-dom";
 import { Navbar } from "@/components/Navbar";
+import { Footer } from "@/components/Footer"; // Add this import
 import { HomePage } from "@/pages/HomePage";
 import { LearnPage } from "@/pages/LearnPage";
 import { LessonPage } from "@/pages/LessonPage";
@@ -19,25 +20,28 @@ import { PathfindingPage } from "@/pages/PathfindingPage";
 
 export default function App() {
   return (
-    <div className="min-h-screen bg-base">
+    <div className="min-h-screen bg-base flex flex-col">
       <ScrollReset />
       <Navbar />
-      <Routes>
-        <Route path="/" element={<HomePage />} />
-        <Route path="/learn" element={<LearnPage />} />
-        <Route path="/learn/:chapterId/:lessonId" element={<LessonPage />} />
-        <Route path="/search" element={<SearchPage />} />
-        <Route path="/notes" element={<NotesPage />} />
-        <Route path="/issue" element={<IssuePage />} />
-        <Route path="/playground" element={<PlaygroundPage />} />
-        <Route path="/problems" element={<ProblemsPage />} />
-        <Route path="/problems/:id" element={<ProblemPage />} />
-        <Route path="/visualizers" element={<VisualizersPage />} />
-        <Route path="/visualizers/:id" element={<VisualizerDetailPage />} />
-        <Route path="/sorting" element={<SortingPage />} />
-        <Route path="/pathfinding" element={<PathfindingPage />} />
-        <Route path="*" element={<NotFoundPage />} />
-      </Routes>
+      <main className="flex-1">
+        <Routes>
+          <Route path="/" element={<HomePage />} />
+          <Route path="/learn" element={<LearnPage />} />
+          <Route path="/learn/:chapterId/:lessonId" element={<LessonPage />} />
+          <Route path="/search" element={<SearchPage />} />
+          <Route path="/notes" element={<NotesPage />} />
+          <Route path="/issue" element={<IssuePage />} />
+          <Route path="/playground" element={<PlaygroundPage />} />
+          <Route path="/problems" element={<ProblemsPage />} />
+          <Route path="/problems/:id" element={<ProblemPage />} />
+          <Route path="/visualizers" element={<VisualizersPage />} />
+          <Route path="/visualizers/:id" element={<VisualizerDetailPage />} />
+          <Route path="/sorting" element={<SortingPage />} />
+          <Route path="/pathfinding" element={<PathfindingPage />} />
+          <Route path="*" element={<NotFoundPage />} />
+        </Routes>
+      </main>
+      <Footer /> {/* Add Footer here */}
       <ScrollToTop />
     </div>
   );

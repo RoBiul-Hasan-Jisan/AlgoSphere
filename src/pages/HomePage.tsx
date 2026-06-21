@@ -1,5 +1,5 @@
 import { lazy, Suspense, useMemo, memo, useState } from "react";
-import logo from "../../public/og-image.png";
+
 import { Link } from "react-router-dom";
 import {
   ArrowRight,
@@ -15,11 +15,10 @@ import {
   Layers,
   ChevronRight,
   
-  Github,
-  Twitter,
-  Youtube,
-  Heart,
+ 
 } from "lucide-react";
+
+
 
 import { CHAPTERS, LESSON_COUNT } from "@/content";
 import { PROBLEM_COUNT } from "@/lib/problems";
@@ -461,45 +460,8 @@ const VisualizerGrid = memo(() => {
 });
 VisualizerGrid.displayName = "VisualizerGrid";
 
-const Footer = memo(() => (
-  <footer className="border-t border-gray-200 bg-white py-8 dark:border-gray-900 dark:bg-[#050505]">
-    <Container>
-      <div className="flex flex-col md:flex-row justify-between items-center gap-6">
-        <div className="flex items-center gap-2 text-lg font-bold text-gray-900 dark:text-white">
-        <img
-    src={logo}
-    alt="AlgoSphere Logo"
-    className="h-7 w-7 rounded-md object-cover"
-  />
-  AlgoSphere
-</div>
 
-        <nav className="flex flex-wrap items-center gap-6 text-sm font-medium text-gray-500 dark:text-gray-400">
-          <Link to="/learn" className="hover:text-gray-900 dark:hover:text-white transition-colors">Learn</Link>
-          <Link to="/visualizers" className="hover:text-gray-900 dark:hover:text-white transition-colors">Visualizers</Link>
-          <Link to="/problems" className="hover:text-gray-900 dark:hover:text-white transition-colors">Problems</Link>
-          <Link to="/about" className="hover:text-gray-900 dark:hover:text-white transition-colors">About</Link>
-        </nav>
 
-        <div className="flex items-center gap-4 text-gray-400">
-          <a href="https://github.com/RoBiul-Hasan-Jisan" target="_blank" rel="noopener noreferrer" aria-label="GitHub" className="hover:text-gray-600 dark:hover:text-gray-300 transition-colors">
-            <Github className="h-4 w-4" />
-          </a>
-          <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" aria-label="Twitter" className="hover:text-gray-600 dark:hover:text-gray-300 transition-colors">
-            <Twitter className="h-4 w-4" />
-          </a>
-          <a href="https://youtube.com" target="_blank" rel="noopener noreferrer" aria-label="YouTube" className="hover:text-gray-600 dark:hover:text-gray-300 transition-colors">
-            <Youtube className="h-4 w-4" />
-          </a>
-        </div>
-      </div>
-      <div className="mt-6 pt-6 border-t border-gray-100 dark:border-gray-800 text-center text-xs text-gray-400">
-        © {new Date().getFullYear()} AlgoSphere. Made with <Heart className="inline h-3 w-3 text-red-400" aria-label="love" /> for developers worldwide.
-      </div>
-    </Container>
-  </footer>
-));
-Footer.displayName = "Footer";
 
 // ========== Main Page Component ==========
 export function HomePage() {
@@ -511,7 +473,7 @@ export function HomePage() {
         <InteractiveFeatures />
         <VisualizerGrid />
       </main>
-      <Footer />
+      
     </div>
   );
 }
