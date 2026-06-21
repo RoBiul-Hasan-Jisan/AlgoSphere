@@ -64,7 +64,7 @@ export function VisualizersPage() {
   );
 }
 
-function VisualizerRow({ visualizer: v, index, isLast }: { visualizer: typeof VISUALIZERS[0]; index: number; isLast: boolean }) {
+function VisualizerRow({ visualizer: v, index }: { visualizer: typeof VISUALIZERS[0]; index: number; isLast: boolean }) {
   const href = v.to ?? `/visualizers/${v.id}`;
   
   return (
