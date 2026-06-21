@@ -4,7 +4,7 @@
 
 AlgoSphere combines a modern textbook, algorithm visualizer, coding playground, problem-solving platform, and personal notebook into one seamless experience. Understand concepts visually, practice them immediately, and track your learning journey—all while keeping your data local and private
 
-**Live Demo:** https://algo-sphere-ten.vercel.app/
+**Live Demo:** https://algo-sphere-jet.vercel.app/
 
 
 
